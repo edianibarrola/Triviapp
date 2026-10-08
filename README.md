@@ -2,7 +2,37 @@
 
 A host-led pub trivia platform for a brewery, with a reusable venue platform as a future direction.
 
-Status: planning foundation. No application, deployed site, or connected Supabase project yet.
+Status: a browser-local practice demo is implemented. Supabase is not connected yet. GitHub Pages requires the repository publishing source to be enabled before its deployment workflow can publish.
+
+## Try the practice demo
+
+The demo follows the approved visual direction: compact app branding, venue-led TV presentation, dark surfaces, orange and cream defaults, and host-controlled question timing.
+
+- Setup accepts PNG, JPEG, and WebP logos up to 5 MB, resizes them to at most 512 pixels, and analyzes colors locally.
+- Transparent pixels are ignored. Chromatic logo ink is preferred over neutral backdrops. The host previews and accepts the suggestion, selects a preset, or chooses a custom accent.
+- Contrast adjustment keeps main text, accents, and primary button labels readable. A logo photo can still include its photographed background; use original artwork for a clean result.
+- Three presets: Orange & Cream, Lime & Charcoal, Blue & Ice. Venue name is the fallback when no logo is uploaded.
+- Two editable sample rounds, 2–8 teams, optional bonuses, team-by-team grading, half credit, approval, answers one at a time, bottom-up leaderboard, ties, corrections, and audited adjustments.
+- Host elapsed/countdown timer with pause/reset and optional TV visibility. Expiration never advances or reveals anything.
+- Progress, timer, venue logo, and appearance survive refresh on the same browser. A TV tab can follow that browser's saved game.
+
+This is a dependency-free JavaScript prototype, not the proposed production React/TypeScript application. Pure domain logic, the demo storage adapter, and palette extraction are separate modules so the prototype's behavior can inform production implementation without coupling it to browser storage.
+
+There is no authentication or secure display credential in this demo. Static sample answers are inspectable in source and browser storage. Do not use confidential question sets or treat this as the live production host/TV system. Separate devices do not synchronize. Uploaded logos stay in local browser storage and are not uploaded to GitHub or a server. Clearing site data removes the demo and its logo.
+
+Local development with Node.js 22 or later:
+
+```sh
+node --test tests/*.test.js
+node scripts/build.js
+node scripts/serve.js
+```
+
+Open http://127.0.0.1:4173/. Use #setup, #host, #teams, and #tv. Tests cover extraction, transparency, grayscale fallback, contrast, transitions, scoring, reveal protection, correction approval, recovery snapshots, timers, and save failures. These are demo logic tests, not backend security certification.
+
+GitHub Pages setup: repository Settings → Pages → Build and deployment → Source → GitHub Actions. Then rerun the **Test and deploy practice demo** workflow. It tests and builds before publishing the dist artifact. The expected site URL is https://edianibarrola.github.io/Triviapp/ once a deployment succeeds.
+
+Visual review is based on the owner-reviewed mockups. Browser interaction and responsive geometry checks supplement automated tests; final visual inspection should be repeated when screenshot capture is available.
 
 ## Product source of truth
 
@@ -152,7 +182,7 @@ This is an acceptance fixture, not a permanent product capacity limit. An initia
 - Document free-tier limits, inactivity pauses, operational checks, monitoring, and backup/restore procedure before live use.
 - No promise of true offline multi-device synchronization.
 
-Supabase account/project creation and deployment secrets are pending owner sign-in. No deployment workflow is enabled in this initial documentation commit.
+Supabase account/project creation and backend deployment secrets are pending owner sign-in. The practice demo has a frontend-only GitHub Actions deployment workflow; backend workflows will be added after Supabase setup.
 
 ## MVP acceptance checklist
 
