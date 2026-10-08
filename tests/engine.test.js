@@ -105,3 +105,15 @@ test('storage failure cannot claim a save, and stale revisions are rejected', as
   await assert.rejects(() => adapter.execute({ type: 'launch' }, 1), /Quota/);
   assert.equal((await adapter.load()).phase, 'READY');
 });
+test('unavailable browser storage fails inside load rather than crashing construction', async () => {
+  const previous = Object.getOwnPropertyDescriptor(globalThis, 'localStorage');
+  Object.defineProperty(globalThis, 'localStorage', { configurable: true, get() { throw new Error('Storage blocked'); } });
+  try {
+    const adapter = new DemoStore();
+    await assert.rejects(() => adapter.load(), /Storage blocked/);
+    await assert.rejects(() => adapter.reset(), /Storage blocked/);
+  } finally {
+    if (previous) Object.defineProperty(globalThis, 'localStorage', previous);
+    else delete globalThis.localStorage;
+  }
+});
